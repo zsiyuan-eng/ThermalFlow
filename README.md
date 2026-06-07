@@ -12,28 +12,6 @@ The repository also includes a polished GitHub Pages site in the project root.
 Open `index.html` locally, or publish this repository with GitHub Pages from the
 root directory. No build step is required.
 
-## Repository Structure
-
-```text
-.
-+-- index.html
-+-- styles.css
-+-- script.js
-+-- requirements.txt
-+-- firmware/
-|   +-- edge_counter/
-|   |   +-- edge_counter.ino
-|   +-- serial_stream/
-|   |   +-- serial_stream.ino
-|   +-- wifi_stream/
-|       +-- wifi_stream.ino
-+-- software/
-    +-- thermal_dashboard/
-        +-- thermal_dashboard_fast.py
-        +-- thermal_dashboard_full.py
-        +-- thermal_dashboard_wifi.py
-        +-- thermal_counter_cli.py
-```
 
 ## Core Modules
 
