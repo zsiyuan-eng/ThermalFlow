@@ -1,0 +1,21 @@
+# Local Python environments
+.venv/
+venv/
+env/
+mlx9064/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Local editor files
+.vscode/
+.idea/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Heavy reference docs should stay out of the website repo
+*.pdf
+*.docx

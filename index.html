@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A polished MLX90640 thermal intelligence system with ESP32 firmware, edge tracking, WiFi streaming, and Python dashboards.">
+    <title>ThermalFlow | Edge Thermal Intelligence</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="ThermalFlow home">
+        <span class="brand-mark"></span>
+        <span>ThermalFlow</span>
+      </a>
+      <nav aria-label="Project sections">
+        <a href="#system">System</a>
+        <a href="#stack">Stack</a>
+        <a href="#software">Code</a>
+        <a href="#repo">Repo</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">MLX90640 / ESP32 / Computer Vision</p>
+          <h1>Edge thermal intelligence for anonymous people flow.</h1>
+          <p class="hero-text">
+            ThermalFlow converts a tiny 32x24 infrared sensor into a complete sensing pipeline:
+            embedded frame acquisition, blob segmentation, motion tracking, entry/exit counting,
+            WiFi streaming, and a live Python control dashboard.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="software/thermal_dashboard/thermal_dashboard_fast.py">View Dashboard Core</a>
+            <a class="button secondary" href="firmware/edge_counter/edge_counter.ino">View Edge Firmware</a>
+          </div>
+        </div>
+
+        <div class="thermal-console" aria-label="Live thermal display demo">
+          <div class="console-topbar">
+            <span class="dot hot"></span>
+            <span class="dot warm"></span>
+            <span class="dot cool"></span>
+            <span class="console-title">MLX90640 FRAME STREAM</span>
+          </div>
+          <canvas id="thermalCanvas" width="640" height="480" aria-label="Animated thermal heatmap"></canvas>
+          <div class="console-readout">
+            <div>
+              <span class="label">Frame</span>
+              <strong id="frameValue">0000</strong>
+            </div>
+            <div>
+              <span class="label">Bodies</span>
+              <strong id="bodyValue">0</strong>
+            </div>
+            <div>
+              <span class="label">Inside</span>
+              <strong id="insideValue">0</strong>
+            </div>
+            <div>
+              <span class="label">Mode</span>
+              <strong>16 Hz</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="metrics" aria-label="Project highlights">
+        <article>
+          <span>768</span>
+          <p>infrared samples per frame</p>
+        </article>
+        <article>
+          <span>460800</span>
+          <p>baud serial pipeline</p>
+        </article>
+        <article>
+          <span>WiFi</span>
+          <p>ESP32 access point stream</p>
+        </article>
+        <article>
+          <span>Edge</span>
+          <p>counter logic on device</p>
+        </article>
+      </section>
+
+      <section id="system" class="section split">
+        <div>
+          <p class="eyebrow">System Design</p>
+          <h2>From sensor matrix to doorway intelligence.</h2>
+          <p>
+            The firmware reads MLX90640 frames, builds a temperature mask, extracts connected
+            thermal regions, and tracks each center across frames. The dashboard receives either
+            serial or WiFi frames, renders the thermal field, and exposes counts that are readable
+            during a live demo.
+          </p>
+        </div>
+        <div class="pipeline" aria-label="System pipeline">
+          <div><strong>01</strong><span>MLX90640 frame capture</span></div>
+          <div><strong>02</strong><span>Temperature mask + blob detection</span></div>
+          <div><strong>03</strong><span>Nearest-neighbor tracking</span></div>
+          <div><strong>04</strong><span>Entry and exit decision line</span></div>
+        </div>
+      </section>
+
+      <section id="stack" class="section split stack-section">
+        <div>
+          <p class="eyebrow">Repository Architecture</p>
+          <h2>Named like a real product, structured like a real system.</h2>
+          <p>
+            The old scratch-folder names are gone. Firmware, dashboards, and documentation now sit
+            in clear modules, so reviewers can understand the project before opening a single file.
+          </p>
+        </div>
+        <div class="stack-list" aria-label="Repository modules">
+          <div><strong>firmware/edge_counter</strong><span>ESP32-side detection, tracking, and entry/exit counting.</span></div>
+          <div><strong>firmware/wifi_stream</strong><span>Access-point TCP stream for wireless thermal frames.</span></div>
+          <div><strong>firmware/serial_stream</strong><span>High-throughput serial thermal matrix transmitter.</span></div>
+          <div><strong>software/thermal_dashboard</strong><span>Python visualizers for serial, WiFi, optimized, and CLI modes.</span></div>
+        </div>
+      </section>
+
+      <section id="software" class="section">
+        <p class="eyebrow">Code Map</p>
+        <h2>Every entry point has a job.</h2>
+        <div class="code-grid">
+          <a class="code-card" href="software/thermal_dashboard/thermal_dashboard_fast.py">
+            <span>Python</span>
+            <strong>Fast thermal dashboard</strong>
+            <p>Serial reader, parser, heatmap, connected components, tracking, and counters.</p>
+          </a>
+          <a class="code-card" href="software/thermal_dashboard/thermal_dashboard_wifi.py">
+            <span>Python</span>
+            <strong>WiFi control dashboard</strong>
+            <p>Connects to the ESP32 access point and renders live thermal frames over TCP.</p>
+          </a>
+          <a class="code-card" href="firmware/edge_counter/edge_counter.ino">
+            <span>Arduino</span>
+            <strong>Edge counter firmware</strong>
+            <p>Memory-conscious ESP32 firmware with center output, FPS reports, and pause control.</p>
+          </a>
+          <a class="code-card" href="firmware/wifi_stream/wifi_stream.ino">
+            <span>Arduino</span>
+            <strong>WiFi streaming firmware</strong>
+            <p>Creates an ESP32 AP and streams 32x24 temperature matrices to the Python client.</p>
+          </a>
+        </div>
+      </section>
+
+      <section id="repo" class="section repo-panel">
+        <div>
+          <p class="eyebrow">GitHub Pages Ready</p>
+          <h2>Ready for GitHub Pages and a clean project repo.</h2>
+          <p>
+            The page is plain HTML, CSS, and JavaScript, so GitHub Pages can serve it directly.
+            The repository now has clean module names, no local environments, no datasheet bulk,
+            and a README that explains the system like a portfolio project.
+          </p>
+        </div>
+        <div class="command-box" aria-label="Useful commands">
+          <code>git init</code>
+          <code>git add .</code>
+          <code>git commit -m "Polish ThermalFlow project"</code>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>ThermalFlow</span>
+      <span>MLX90640 thermal sensing project</span>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
