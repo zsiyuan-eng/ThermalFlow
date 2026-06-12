@@ -4,6 +4,10 @@ Anonymous people-flow counting with a 32x24 thermal sensor.
 
 Built around the MLX90640 and an ESP32. The sensor reads heat signatures, not faces, so you get real counting without any camera or privacy issues. Firmware handles all the blob detection and tracking on-device, and can either stream raw frames to a Python dashboard or report entry/exit counts directly over serial.
 
+## Preview
+
+![ThermalFlow MLX90640 dashboard preview](8b65ff45facd8111372db9337cb8a40a.png)
+
 ## What's in here
 
 Open `index.html` locally, or publish this repository with GitHub Pages from the
