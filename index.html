@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A polished MLX90640 thermal intelligence system with ESP32 firmware, edge tracking, WiFi streaming, and Python dashboards.">
+    <meta name="description" content="Anonymous people-flow counting with a 32x24 MLX90640 thermal sensor and ESP32. On-device blob tracking, serial and WiFi streaming, Python dashboard.">
     <title>ThermalFlow | Edge Thermal Intelligence</title>
     <link rel="stylesheet" href="styles.css">
   </head>
@@ -17,7 +17,7 @@
         <a href="#system">System</a>
         <a href="#stack">Stack</a>
         <a href="#software">Code</a>
-        <a href="#repo">Repo</a>
+        <a href="#demo">Demo</a>
       </nav>
     </header>
 
@@ -27,9 +27,9 @@
           <p class="eyebrow">MLX90640 / ESP32 / Computer Vision</p>
           <h1>Edge thermal intelligence for anonymous people flow.</h1>
           <p class="hero-text">
-            ThermalFlow converts a tiny 32x24 infrared sensor into a complete sensing pipeline:
-            embedded frame acquisition, blob segmentation, motion tracking, entry/exit counting,
-            WiFi streaming, and a live Python control dashboard.
+            32×24 IR sensor on an ESP32. Firmware reads frames, finds heat blobs, tracks them
+            across the doorway, and counts who's coming and going — all on-device. Python dashboard
+            for the live heatmap and counters.
           </p>
           <div class="hero-actions">
             <a class="button primary" href="software/thermal_dashboard/thermal_dashboard_fast.py">View Dashboard Core</a>
@@ -88,12 +88,12 @@
       <section id="system" class="section split">
         <div>
           <p class="eyebrow">System Design</p>
-          <h2>From sensor matrix to doorway intelligence.</h2>
+          <h2>Sensor to doorway counter in a few hundred lines.</h2>
           <p>
-            The firmware reads MLX90640 frames, builds a temperature mask, extracts connected
-            thermal regions, and tracks each center across frames. The dashboard receives either
-            serial or WiFi frames, renders the thermal field, and exposes counts that are readable
-            during a live demo.
+            The firmware reads MLX90640 frames, thresholds by temperature, finds connected blobs,
+            and tracks each center across frames. A decision line down the middle of the field of
+            view handles entry vs exit. The Python dashboard picks up frames over serial or WiFi
+            and renders everything live.
           </p>
         </div>
         <div class="pipeline" aria-label="System pipeline">
@@ -106,11 +106,11 @@
 
       <section id="stack" class="section split stack-section">
         <div>
-          <p class="eyebrow">Repository Architecture</p>
-          <h2>Named like a real product, structured like a real system.</h2>
+          <p class="eyebrow">Project Structure</p>
+          <h2>Firmware, dashboard, and docs all in one place.</h2>
           <p>
-            The old scratch-folder names are gone. Firmware, dashboards, and documentation now sit
-            in clear modules, so reviewers can understand the project before opening a single file.
+            Firmware and Python dashboards are split into separate folders so it's easy to
+            find what you need — whether you're flashing the ESP32 or tweaking the visualizer.
           </p>
         </div>
         <div class="stack-list" aria-label="Repository modules">
@@ -123,7 +123,7 @@
 
       <section id="software" class="section">
         <p class="eyebrow">Code Map</p>
-        <h2>Every entry point has a job.</h2>
+        <h2>Four scripts, four use cases.</h2>
         <div class="code-grid">
           <a class="code-card" href="software/thermal_dashboard/thermal_dashboard_fast.py">
             <span>Python</span>
@@ -148,20 +148,16 @@
         </div>
       </section>
 
-      <section id="repo" class="section repo-panel">
-        <div>
-          <p class="eyebrow">GitHub Pages Ready</p>
-          <h2>Ready for GitHub Pages and a clean project repo.</h2>
-          <p>
-            The page is plain HTML, CSS, and JavaScript, so GitHub Pages can serve it directly.
-            The repository now has clean module names, no local environments, no datasheet bulk,
-            and a README that explains the system like a portfolio project.
-          </p>
-        </div>
-        <div class="command-box" aria-label="Useful commands">
-          <code>git init</code>
-          <code>git add .</code>
-          <code>git commit -m "Polish ThermalFlow project"</code>
+      <section id="demo" class="section demo-section">
+        <p class="eyebrow">Hardware Demo</p>
+        <h2>Running live.</h2>
+        <p>
+          ESP32 and MLX90640 connected over I2C, serial output piped into the Python dashboard.
+          The heatmap updates in real time as people cross the sensor's field of view — entry and
+          exit counts tick up on the right.
+        </p>
+        <div class="demo-image-wrap">
+          <img src="8b65ff45facd8111372db9337cb8a40a.png" alt="ThermalFlow Python dashboard running with live thermal data" class="demo-image">
         </div>
       </section>
     </main>

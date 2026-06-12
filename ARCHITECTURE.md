@@ -1,42 +1,37 @@
 # ThermalFlow Architecture
 
-ThermalFlow is split into three layers: sensing firmware, host visualization,
-and project presentation.
+Two main parts: ESP32 firmware that does sensing and tracking, and a Python dashboard on the host side.
 
 ## 1. Sensing Firmware
 
-The ESP32 reads the MLX90640 over I2C and can operate in three modes:
+The ESP32 reads the MLX90640 over I2C at up to 16 Hz. Three firmware modes:
 
-- `edge_counter` performs embedded thresholding, connected-component detection,
-  center extraction, nearest-neighbor tracking, and entry/exit decisions.
-- `serial_stream` focuses on raw frame transmission over USB serial.
-- `wifi_stream` exposes an ESP32 access point and streams frames over TCP.
+- `edge_counter` — does the full pipeline on-device: temperature threshold, connected-component detection, center extraction, nearest-neighbor tracking across frames, and entry/exit decisions. Outputs counts + centers over serial.
+- `serial_stream` — skips all that, just dumps raw frames as fast as possible over USB serial at 460800 baud. The host handles everything.
+- `wifi_stream` — same raw-frame dump, but over TCP. ESP32 creates its own access point so no router needed.
 
 ## 2. Host Dashboard
 
-The Python dashboard parses either serial or TCP frames and renders the 32x24
-thermal matrix as a live heatmap. Tracking overlays, event counters, frame
-statistics, and connection status are displayed for demos and debugging.
+Python reads either serial or TCP frames, parses the 32×24 temperature matrix, runs connected-component analysis and tracking if needed, and renders a live heatmap. The dashboard shows the thermal field, tracking circles with IDs, entry/exit counters, and FPS.
 
-## 3. Website Layer
+Four scripts covering different use cases:
 
-The root `index.html`, `styles.css`, and `script.js` form a static GitHub Pages
-site. The animated canvas is a front-end simulation of the project output, so the
-website works without hardware attached.
+- `thermal_dashboard_fast.py` — optimized for live demos, minimal latency
+- `thermal_dashboard_full.py` — more panels and debug info
+- `thermal_dashboard_wifi.py` — TCP client for the WiFi firmware
+- `thermal_counter_cli.py` — terminal only, no GUI, good for headless testing
 
 ## Data Flow
 
-```text
+```
 MLX90640
-  -> ESP32 I2C frame acquisition
-  -> thermal threshold / frame serialization
+  -> ESP32 I2C frame read
+  -> temperature thresholding + serialization (or edge counting)
   -> USB serial or WiFi TCP
-  -> Python dashboard
-  -> heatmap, tracks, entry/exit counts
+  -> Python parser
+  -> heatmap render, tracking overlays, entry/exit counts
 ```
 
-## Why Thermal Sensing
+## Why thermal and not camera
 
-The system uses low-resolution infrared data instead of camera images. That
-makes the demo privacy-friendly while still showing a meaningful sensing,
-tracking, and counting pipeline.
+Low-resolution IR means no facial features, no identifying information. You can tell there's a person-shaped heat blob crossing a line, but that's it. Makes the demo safe to run anywhere without consent issues.

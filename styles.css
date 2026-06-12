@@ -376,30 +376,23 @@ h2 {
   font-size: 15px;
 }
 
-.repo-panel {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 420px);
-  gap: 36px;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.045);
+.demo-section {
   border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
 }
 
-.command-box {
-  display: grid;
-  gap: 10px;
-  padding: 18px;
+.demo-image-wrap {
+  margin-top: 36px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #090b10;
+  overflow: hidden;
+  background: var(--panel);
 }
 
-code {
+.demo-image {
   display: block;
-  overflow-wrap: anywhere;
-  color: var(--green);
-  font: 700 14px / 1.5 "Cascadia Code", Consolas, monospace;
+  width: 100%;
+  max-height: 680px;
+  object-fit: contain;
 }
 
 footer {

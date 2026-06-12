@@ -1,72 +1,54 @@
 # ThermalFlow
 
-Edge thermal intelligence for anonymous people-flow counting.
+Anonymous people-flow counting with a 32x24 thermal sensor.
 
-ThermalFlow is an end-to-end MLX90640 project: ESP32 firmware captures 32x24
-thermal frames, embedded logic can segment and track human heat signatures, and
-Python dashboards visualize the stream while maintaining entry / exit counts.
-The repository also includes a polished GitHub Pages site in the project root.
+Built around the MLX90640 and an ESP32. The sensor reads heat signatures, not faces, so you get real counting without any camera or privacy issues. Firmware handles all the blob detection and tracking on-device, and can either stream raw frames to a Python dashboard or report entry/exit counts directly over serial.
 
-## Live Site
+## What's in here
 
 Open `index.html` locally, or publish this repository with GitHub Pages from the
 root directory. No build step is required.
 
+```
+firmware/edge_counter/       ESP32 firmware: thresholding, blob detection, tracking, counting on-device
+firmware/serial_stream/      streams raw 32x24 frames over serial at 460800 baud
+firmware/wifi_stream/        same thing, but over TCP through the ESP32's own AP
+software/thermal_dashboard/  Python side: frame parsing, heatmap render, tracking overlays, counters
+```
 
-## Core Modules
+## Hardware
 
-- `firmware/edge_counter` - ESP32 firmware that performs thresholding,
-  connected-component blob detection, center tracking, FPS reporting, and
-  entry/exit counting on device.
-- `firmware/serial_stream` - high-throughput serial transmitter for raw 32x24
-  temperature matrices.
-- `firmware/wifi_stream` - ESP32 access-point firmware that streams thermal
-  frames over TCP.
-- `software/thermal_dashboard` - Python dashboards for serial, WiFi, optimized
-  rendering, and terminal-only counting.
+- ESP32 dev board
+- MLX90640 (32x24 IR array)
+- I2C between them
+- USB serial or WiFi for the host
 
-## Hardware Stack
+## Running it
 
-- ESP32 development board
-- MLX90640 32x24 thermal infrared array
-- I2C connection between ESP32 and MLX90640
-- USB serial or ESP32 WiFi access point for host communication
-
-## Python Setup
+Install deps first:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Run the optimized serial dashboard:
+Serial dashboard (flash `serial_stream.ino` or `edge_counter.ino` first, update `SERIAL_PORT` in the script):
 
 ```bash
 python software/thermal_dashboard/thermal_dashboard_fast.py
 ```
 
-Run the WiFi dashboard:
+WiFi dashboard (flash `wifi_stream.ino`, connect to `MLX90640_AP`):
 
 ```bash
 python software/thermal_dashboard/thermal_dashboard_wifi.py
 ```
 
-## Arduino Setup
+There's also `thermal_counter_cli.py` if you just want the terminal counter with no GUI.
 
-Open the sketch you want to flash:
+## Arduino
 
-- `firmware/edge_counter/edge_counter.ino`
-- `firmware/serial_stream/serial_stream.ino`
-- `firmware/wifi_stream/wifi_stream.ino`
+Open the sketch you need in Arduino IDE. The Adafruit MLX90640 library has to be installed before compiling.
 
-Install the Adafruit MLX90640 library in Arduino IDE before compiling.
-
-## Publish
-
-```bash
-git init
-git add .
-git commit -m "Polish ThermalFlow project"
-```
-
-Push to GitHub, then enable Pages from the repository root.
-"# ThermalFlow" 
+- `firmware/edge_counter/edge_counter.ino` - on-device counting, outputs centers and counts over serial
+- `firmware/serial_stream/serial_stream.ino` - raw frame dump for the Python dashboards
+- `firmware/wifi_stream/wifi_stream.ino` - same but streams to a TCP client over WiFi
